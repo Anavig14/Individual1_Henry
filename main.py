@@ -8,8 +8,8 @@ app = FastAPI()
 
 ## FUNCION 1. CANTIDAD DE PELICULAS ESTRENADAS EN UN MES ESPECIFICO
 
-# Cargar el DataFrame (asegúrate de ajustar la ruta a tu archivo)
-df_movies = pd.read_csv(r'C:\Users\anavi\OneDrive\Escritorio\Individual1 _ Henry\movies.csv')
+# Para cargar el DataFrame
+df_movies = pd.read_csv(r'movies.csv')
 
 # Asegúrate de que 'release_date' esté en formato de fecha
 df_movies['release_date'] = pd.to_datetime(df_movies['release_date'], format='%Y-%m-%d', errors='coerce')
