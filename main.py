@@ -121,3 +121,13 @@ def get_director(nombre_director: str):
         "director": nombre_director,
         "películas dirigidas": info_peliculas
     }
+
+## FUNCION DE RECOMENDACIÓN.
+
+def recomendacion(titulo):
+    titulo = re.sub(r'[^a-z\s]', '', titulo.lower())
+    titulo_vector = tfidf_vectorizer.transform([titulo])
+    cosine_similarities = cosine_similarity(titulo_vector, tfidf_matrix).flatten()
+    similar_indices = cosine_similarities.argsort()[-6:-1][::-1]
+    similar_titles = df_movies['original_title'].iloc[similar_indices].tolist()
+    return similar_titles
