@@ -2,6 +2,10 @@ import pandas as pd
 from fastapi import FastAPI
 from typing import Dict
 
+import re
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
 app = FastAPI()
 
 # DESARROLLO DE FUNCIONES
@@ -124,10 +128,21 @@ def get_director(nombre_director: str):
 
 ## FUNCION DE RECOMENDACIÓN.
 
-def recomendacion(titulo):
-    titulo = re.sub(r'[^a-z\s]', '', titulo.lower())
-    titulo_vector = tfidf_vectorizer.transform([titulo])
-    cosine_similarities = cosine_similarity(titulo_vector, tfidf_matrix).flatten()
-    similar_indices = cosine_similarities.argsort()[-6:-1][::-1]
-    similar_titles = df_movies['original_title'].iloc[similar_indices].tolist()
-    return similar_titles
+
+
+@app.get('/get_recommendation/{titulo}', response_model=List[str])
+def recomendacion(titulo: str):
+    try:
+        titulo = re.sub(r'[^a-z\s]', '', titulo.lower())
+
+        titulo_vector = tfidf_vectorizer.transform([titulo])
+
+        cosine_similarities = cosine_similarity(titulo_vector, tfidf_matrix).flatten()
+
+        similar_indices = cosine_similarities.argsort()[-6:-1][::-1]
+
+        similar_titles = df_movies['original_title'].iloc[similar_indices].tolist()
+
+        return similar_titles
+    except Exception as e:
+        return {"error": str(e)}
