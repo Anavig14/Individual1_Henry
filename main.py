@@ -130,7 +130,7 @@ def get_director(nombre_director: str):
 
 
 
-@app.get('/get_recommendation/{titulo}', response_model=List[str])
+@app.get('/get_recommendation/{titulo}', response_model=list[str])
 def recomendacion(titulo: str):
     try:
         titulo = re.sub(r'[^a-z\s]', '', titulo.lower())
