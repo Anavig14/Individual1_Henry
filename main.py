@@ -1,10 +1,10 @@
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from typing import Dict
 
-import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import re
 
 app = FastAPI()
 
@@ -128,21 +128,30 @@ def get_director(nombre_director: str):
 
 ## FUNCION DE RECOMENDACIÓN.
 
+tfidf_vectorizer = TfidfVectorizer(stop_words='english')
 
+tfidf_matrix = tfidf_vectorizer.fit_transform(df_movies['original_title'].fillna(''))
 
+# películas similares
+def find_similar_movies(title: str, top_n: int = 5):
+    try:
+        title_cleaned = re.sub(r'[^a-z\s]', '', title.lower()) #se limpia el titulo
+        title_vector = tfidf_vectorizer.transform([title_cleaned]) # se vectoriza
+        cosine_similarities = cosine_similarity(title_vector, tfidf_matrix).flatten() #similitud del coseno
+        similar_indices = cosine_similarities.argsort()[-(top_n+1):-1][::-1] #indices de peliculas similares
+        similar_titles = df_movies['original_title'].iloc[similar_indices].tolist() #extrae similares
+        
+        return similar_titles
+    except Exception as e:
+        raise ValueError(f"Error processing the recommendation: {str(e)}")
+
+# Endpoint de la API
 @app.get('/get_recommendation/{titulo}', response_model=list[str])
 def recomendacion(titulo: str):
     try:
-        titulo = re.sub(r'[^a-z\s]', '', titulo.lower())
-
-        titulo_vector = tfidf_vectorizer.transform([titulo])
-
-        cosine_similarities = cosine_similarity(titulo_vector, tfidf_matrix).flatten()
-
-        similar_indices = cosine_similarities.argsort()[-6:-1][::-1]
-
-        similar_titles = df_movies['original_title'].iloc[similar_indices].tolist()
-
-        return similar_titles
+        recommendations = find_similar_movies(titulo)
+        if not recommendations:
+            raise HTTPException(status_code=404, detail="No similar movies found.")
+        return recommendations
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
