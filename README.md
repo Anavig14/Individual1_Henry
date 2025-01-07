@@ -9,9 +9,11 @@ Aqui se encuentra un resumen de todas las actividades realizadas para finalmente
 # Tabla de Contenido: 
 
 1. [Contexto](#contexto)
-2. [Procesos](#procesos)
+2. [Procesos Implementados](#2-procesos-implemetados)
 3. [Análisis Exploratorio](#analisis-exploratorio)
-4. 
+4. [Despliegue de la API](#4-despliegue-de-la-api)
+5. [Desarrollo del Sistema de Recomendación](#5-desarrollo-del-sistema-de-recomendación)
+4. [Link Video y API](#6-link-api-y-video)
 
 
 # 1. **Contexto**
@@ -31,12 +33,12 @@ A continuación explicaré el ETL desarrollado (archivo: ETL_completo):
    3. El proyecto pide que se desaniden unas columnas especificas: "belongs_to_collection", "genres", "production_companies" y "production_countries". Este proceso fue bastante dispendioso. Para empezar confirme que no hayan datos nulos en estas columnas y los reemplacé con listas vacias, posteriormente convertí los strings en diccionarios y finalmente se normalizaron los datos con la función normalize_entry para posteriormente concatenar los df en uno solo. El proceso fue el mismo con cada una de las columnas mencionadas. 
 
    4. Seguido, hice las transformaciones sugeridas para el proyecto:
-   - Desanidado y limpieza de datos iniciales.
-   - Rellenado de valores nulos en `budget` y `revenue` con 0.
-   - Conversión de fechas a formato `AAAA-MM-DD` y creación de la columna `release_year`.
-   - Cálculo de la columna `return` (revenue/budget) para medir el retorno de inversión.
-   - Eliminación de columnas innecesarias como `video`, `imdb_id`, `poster_path`, entre otras.
-   - Adicionalmente, agregué una columna con el dia de la semana de estreno para cada pelicula. 
+      - Desanidado y limpieza de datos iniciales.
+      - Rellenado de valores nulos en `budget` y `revenue` con 0.
+      - Conversión de fechas a formato `AAAA-MM-DD` y creación de la columna `release_year`.
+      - Cálculo de la columna `return` (revenue/budget) para medir el retorno de inversión.
+      - Eliminación de columnas innecesarias como `video`, `imdb_id`, `poster_path`, entre otras.
+      - Adicionalmente, agregué una columna con el dia de la semana de estreno para cada pelicula. 
 
    5. Con ambos dataset limpios y organizados, creo un nuevo dataset llamado movies, con el cual procedo a hacer la EDA. 
 
@@ -66,9 +68,9 @@ Generé tambien las graficas teniendo en cuenta el total y el promedio de ingres
 
 Finalmente hice el mismo ejercicio con el retorno del ingreso total e ingreso promedio por año. Las peliculas con mejor retorno son: 웰컴 투 동막골/Bienvenido a Dongmakgol (2005), Aquí Entre Nos (2012), Nurse 3-D (2013), From Prada to Nada (2011)	y Paranormal Activity (2007). Los cinco años con mayor retorno promedio son: 2005, 2012, 2013, 2011 y 2007.
 
-**CONCLUSIÓN:** He visto que en mi dataset original hay muchas peliculas de las decadas anteriores a 1990 que no son muy representativas por lo tanto las elimino, tambien despues de todo este analisis exploratorio veo que si hay valores atipicos que vale la pena exploar por eso no los voy a borrar.
+   **CONCLUSIÓN:** He visto que en mi dataset original hay muchas peliculas de las decadas anteriores a 1990 que no son muy representativas por lo tanto las elimino, tambien despues de todo este analisis exploratorio veo que si hay valores atipicos que vale la pena exploar por eso no los voy a borrar.
 
-Me parece muy importante tener en cuenta que así como no hay mucha correlación entre si una pelicula tuvo un gran presupuesto porque veo que esto no implica que haya tenido tambien un gran ingreso, me voy a centrar en la columna de retorno de la inversión como variable representativa y voy a crear un nuevo df de movies solo con las peliculas desde 1990 (este ya está) y luego de este voy a eliminar todas las peliculas con un return igual o menor que cero, considerando que no fueron peliculas rentables. 
+   Me parece muy importante tener en cuenta que así como no hay mucha correlación entre si una pelicula tuvo un gran presupuesto porque veo que esto no implica que haya tenido tambien un gran ingreso, me voy a centrar en la columna de retorno de la inversión como variable representativa y voy a crear un nuevo df de movies solo con las peliculas desde 1990 (este ya está) y luego de este voy a eliminar todas las peliculas con un return igual o menor que cero, considerando que no fueron peliculas rentables. 
 
 La información resultante quedp en el archivo Exitosas_1990.
 
@@ -76,14 +78,14 @@ La información resultante quedp en el archivo Exitosas_1990.
 
 Se propone el uso de una API (arhivo: main) para que la empresa tenga disponibles los resultados de las siguientes funciones: 
 
-1. Cantidad de filmaciones por mes: Se ingresa un mes en españpl y devuelve la cantidad de peliculas que fueron estrenadas en el mes, consultando en todo el dataset. 
-2. Cantidad de filmaciones por día: Se ingresa un dia de la semana en español y arroja la cantidad de peliculas estrenadas ese día. 
-3. Score por titulo: se ingresa el titulo de una filmación y se arroja el año de estreno y el score de la pelicula. El nombre debe coincidir exactamente. Ejemplo: Toy Story
-4. Votos por titulo: se ingresa el titulo exacto de una pelicula y la API arroja la cantidad de votos y el promedio de votaciones de esa pelicula. La pelicula debe tener al menos 2000 valoraciones. 
-5. Actor: se ingresa el nombre del actor y arroja el exito del actor a traves del retorno, la cantidad de peliculas en las que ha participado y el retorno promedio. 
-6. Director: se ingresa el nombre del director y arroja el exito medido a traves del retorno, devuelve en orden de exito las peliculas, incluyendo la fecha de lanzamiento, retorno individual, costo y ganancia. 
+   1. Cantidad de filmaciones por mes: Se ingresa un mes en españpl y devuelve la cantidad de peliculas que fueron estrenadas en el mes, consultando en todo el dataset. 
+   2. Cantidad de filmaciones por día: Se ingresa un dia de la semana en español y arroja la cantidad de peliculas estrenadas ese día. 
+   3. Score por titulo: se ingresa el titulo de una filmación y se arroja el año de estreno y el score de la pelicula. El nombre debe coincidir exactamente. Ejemplo: Toy Story
+   4. Votos por titulo: se ingresa el titulo exacto de una pelicula y la API arroja la cantidad de votos y el promedio de votaciones de esa pelicula. La pelicula debe tener al menos 2000 valoraciones. 
+   5. Actor: se ingresa el nombre del actor y arroja el exito del actor a traves del retorno, la cantidad de peliculas en las que ha participado y el retorno promedio. 
+   6. Director: se ingresa el nombre del director y arroja el exito medido a traves del retorno, devuelve en orden de exito las peliculas, incluyendo la fecha de lanzamiento, retorno individual, costo y ganancia. 
 
-3. **Desarrollo del Sistema de Recomendación**:
+# 5. **Desarrollo del Sistema de Recomendación**:
 
 Dentro de la misma API (arhivo: main) se incluye una función de recomendación, el cual busca recomendar peliculas a los usuarios basandose en los nombres similares de las peliculas utilizando TF-IDF y la similitud del coseno. Las peliculas recomendadas se ordenan segun el score de similaridad y devolverá uan lista con las peliculas de mayor puntaje. 
 
@@ -95,12 +97,13 @@ Dentro de la misma API (arhivo: main) se incluye una función de recomendación,
 - Finalmente obtiene los indices de las peliculas similares ordenadas de esa forma. 
 - Arroja las peliculas con esta caracteristica. 
 
-## 🚀 Funcionalidades de la API
 
+# 6. Link API y Video
 
-### Cómo Usar la API
+Link para API: https://individual1-henry.onrender.com/docs
 
-Link para render: https://individual1-henry.onrender.com/docs
+Link para video explicativo: https://www.youtube.com/watch?v=bEnerbBHuA8&ab_channel=NataliaVillegas 
+
 
 1. Clona este repositorio:
    ```bash
