@@ -105,7 +105,7 @@ Link para API: https://individual1-henry.onrender.com/docs
 Link para video explicativo: https://www.youtube.com/watch?v=bEnerbBHuA8&ab_channel=NataliaVillegas 
 
 
-1. Clona este repositorio:
+Clona este repositorio:
    ```bash
    git clone https://github.com/Anavig14/Individual1_Henry.git
    cd Individual1_Henry
