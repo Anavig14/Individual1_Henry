@@ -8,27 +8,29 @@ Aqui se encuentra un resumen de todas las actividades realizadas para finalmente
 
 # Tabla de Contenido: 
 
-[Contexto](#Contexto)
-[Procesos Implementados](#Procesos)
+1. [Contexto](#contexto)
+2. [Procesos](#procesos)
+3. [Análisis Exploratorio](#analisis-exploratorio)
+4. 
 
 
-## Contexto
+# 1. **Contexto**
 
 En este proyecto, el objetivo principal es desarrollar un **MVP** que permita implementar un modelo de recomendación para una start-up que provee servicios de agregación de plataformas de streaming. El reto radica en que los datos iniciales están desordenados, anidados y carecen de procesos automatizados, lo que requiere comenzar desde cero.
 
 Para esta actividad, contamos con dos bases de datos que deben pasar por un proceso de limpieza, las cuales son: movies (contienen la información relacionada con la producción de las peliculas) y credits (que contiene la información sobre el elenco y la dirección de las peliculas encontradas en la base anterior)
 
-## ⚙️ Procesos Implementados
+# 2. **Procesos Implemetados**
 
 A continuación explicaré el ETL desarrollado (archivo: ETL_completo): 
 
-1. Doy inicio a la desagregación y limpieza del dataset "credits" dado que este es más grande. La idea es extraer unicamente el nombre del director de las peliculas y posteriormente el actor principal, junto con el nombre de su respectivo personaje. Debido a que las peliculas tienen varios directores y varios actores, he optado por tomar solo el principal para reducir al maximo el tamaño del dataset. En este data set toda la información esta anidada, por lo tanto necesité normalizarla para poder extraer la información mencionada. Hice la extracción creando nuevos datasets con la información que queria: primero con el actor pincipal, luego con el director. En ambos caos elimine todas las columnas innecesarias.
+   1. Doy inicio a la desagregación y limpieza del dataset "credits" dado que este es más grande. La idea es extraer unicamente el nombre del director de las peliculas y posteriormente el actor principal, junto con el nombre de su respectivo personaje. Debido a que las peliculas tienen varios directores y varios actores, he optado por tomar solo el principal para reducir al maximo el tamaño del dataset. En este data set toda la información esta anidada, por lo tanto necesité normalizarla para poder extraer la información mencionada. Hice la extracción creando nuevos datasets con la información que queria: primero con el actor pincipal, luego con el director. En ambos caos elimine todas las columnas innecesarias.
 
-2. Luego inicio con la limpieza del dataset "movies"; es un archivo igualmente pesado, voy a eliminar las columnas que se solicita que se eliminen y tambien las que considero no aportan información que yo vaya a utilizar. Tambien agregué en este la información resultante de "credits"
+   2. Luego inicio con la limpieza del dataset "movies"; es un archivo igualmente pesado, voy a eliminar las columnas que se solicita que se eliminen y tambien las que considero no aportan información que yo vaya a utilizar. Tambien agregué en este la información resultante de "credits"
 
-3. El proyecto pide que se desaniden unas columnas especificas: "belongs_to_collection", "genres", "production_companies" y "production_countries". Este proceso fue bastante dispendioso. Para empezar confirme que no hayan datos nulos en estas columnas y los reemplacé con listas vacias, posteriormente convertí los strings en diccionarios y finalmente se normalizaron los datos con la función normalize_entry para posteriormente concatenar los df en uno solo. El proceso fue el mismo con cada una de las columnas mencionadas. 
+   3. El proyecto pide que se desaniden unas columnas especificas: "belongs_to_collection", "genres", "production_companies" y "production_countries". Este proceso fue bastante dispendioso. Para empezar confirme que no hayan datos nulos en estas columnas y los reemplacé con listas vacias, posteriormente convertí los strings en diccionarios y finalmente se normalizaron los datos con la función normalize_entry para posteriormente concatenar los df en uno solo. El proceso fue el mismo con cada una de las columnas mencionadas. 
 
-4. Seguido, hice las transformaciones sugeridas para el proyecto:
+   4. Seguido, hice las transformaciones sugeridas para el proyecto:
    - Desanidado y limpieza de datos iniciales.
    - Rellenado de valores nulos en `budget` y `revenue` con 0.
    - Conversión de fechas a formato `AAAA-MM-DD` y creación de la columna `release_year`.
@@ -36,21 +38,21 @@ A continuación explicaré el ETL desarrollado (archivo: ETL_completo):
    - Eliminación de columnas innecesarias como `video`, `imdb_id`, `poster_path`, entre otras.
    - Adicionalmente, agregué una columna con el dia de la semana de estreno para cada pelicula. 
 
-5. Con ambos dataset limpios y organizados, creo un nuevo dataset llamado movies, con el cual procedo a hacer la EDA. 
+   5. Con ambos dataset limpios y organizados, creo un nuevo dataset llamado movies, con el cual procedo a hacer la EDA. 
 
 
-**Análisis Exploratorio de Datos (EDA)**:
+# 3. **Analisis Exploratorio**
 
 Para realizar este análisis (archivo: EDA_completo), he utilizado la base de datos completamente depurada, la cual se llama igual que la original "movies". Saco la información de las columnas con las que cuento en el dataset, se observa que las variables numericas no tienen datos nulos; la información nula no aporta mucho a este analisis por lo tanto no la tendré en cuenta. Me quedo con las cuatro variables numericas: promedio, desviación, minimos y máximos. 
 
 Utilizo histogramas de las cuatro variables seleccionadas, para entender el comportamiento; alguna conclusiones: 
 
-1. *Budget:* esta grafica del presupuesto no es muy explicativa, creo que vale la pena explorarla mejor de otra manera. 
-2. *Revenue:* esta grafica del presupuesto no es muy explicativa, creo que vale la pena explorarla mejor de otra manera. 
-3. *vote_average*: lo que veo en esta grafica es que el promedio de votos de la mayoria de las peliculas esta entre 5 y 7.5 
-4. *vote_count*: no considero que esta variable sea muy representativa, creo que puedo descartarla o explorarla de otra manera. 
-5. *release_year*: veo que la mayoria de peliculas fueron estrenadas desde la decada de 1990. Voy a revisar si elimino las anteriores para que la información pueda ser más ilustrativa. 
-6. *Return*: esta grafica del presupuesto no es muy explicativa, creo que vale la pena explorarla mejor de otra manera. 
+   1. *Budget:* esta grafica del presupuesto no es muy explicativa, creo que vale la pena explorarla mejor de otra manera. 
+   2. *Revenue:* esta grafica del presupuesto no es muy explicativa, creo que vale la pena explorarla mejor de otra manera. 
+   3. *vote_average*: lo que veo en esta grafica es que el promedio de votos de la mayoria de las peliculas esta entre 5 y 7.5 
+   4. *vote_count*: no considero que esta variable sea muy representativa, creo que puedo descartarla o explorarla de otra manera. 
+   5. *release_year*: veo que la mayoria de peliculas fueron estrenadas desde la decada de 1990. Voy a revisar si elimino las anteriores para que la información pueda ser más ilustrativa. 
+   6. *Return*: esta grafica del presupuesto no es muy explicativa, creo que vale la pena explorarla mejor de otra manera. 
 
 Posteriormente elimino todas las peliculas que tienen una fecha de estreno anterior a 1990, y reviso la información de las nuevas columnas resultantes. La conclusión más significativa es que eliminar las peliculas estrenadads antes de 1990, no genera un cambio significativo. 
 
@@ -70,7 +72,7 @@ Me parece muy importante tener en cuenta que así como no hay mucha correlación
 
 La información resultante quedp en el archivo Exitosas_1990.
 
-4. **Despliegue de la API**:
+# 4. **Despliegue de la API**:
 
 Se propone el uso de una API (arhivo: main) para que la empresa tenga disponibles los resultados de las siguientes funciones: 
 
