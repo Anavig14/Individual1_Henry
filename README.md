@@ -1,15 +1,18 @@
-# Individual1_Henry
-
-## Sistema de Recomendación de peliculas
-
-Link para render: https://individual1-henry.onrender.com/docs
+# Individual1_Henry - Data Science
 
 # 🎥 Sistema de Recomendación de Películas - Proyecto Individual
 
-Este repositorio contiene el desarrollo de un sistema de recomendación de películas.
-## 📖 Contexto y Rol a Desarrollar
+Este repositorio contiene el desarrollo de un sistema de recomendación de películas presentado como Data Science de Henry. 
 
-### Contexto
+Aqui se encuentra un resumen de todas las actividades realizadas para finalmente crear la función de recomendación. 
+
+# Tabla de Contenido: 
+
+[Contexto](#Contexto)
+[Procesos Implementados](#Procesos)
+
+
+## Contexto
 
 En este proyecto, el objetivo principal es desarrollar un **MVP** que permita implementar un modelo de recomendación para una start-up que provee servicios de agregación de plataformas de streaming. El reto radica en que los datos iniciales están desordenados, anidados y carecen de procesos automatizados, lo que requiere comenzar desde cero.
 
